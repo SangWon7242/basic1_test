@@ -14,23 +14,24 @@ public class Rq {
 
   public boolean removeCookie(String name) {
     if (req.getCookies() != null) {
-      Arrays.stream(req.getCookies())
-          .filter(cookie -> cookie.getName().equals(name))
-          .forEach(cookie -> {
-            cookie.setMaxAge(0);
-            resp.addCookie(cookie);
-          });
+      Cookie cookie = Arrays.stream(req.getCookies())
+          .filter(c -> c.getName().equals(name))
+          .findFirst()
+          .orElse(null);
 
-      return Arrays.stream(req.getCookies())
-          .filter(cookie -> cookie.getName().equals(name))
-          .count() > 0;
+      if (cookie != null) {
+        cookie.setMaxAge(0);
+        resp.addCookie(cookie);
+
+        return true;
+      }
     }
 
     return false;
   }
 
   public String getCookie(String name, String defaultValue) {
-    if ( req.getCookies() == null ) return defaultValue;
+    if (req.getCookies() == null) return defaultValue;
 
     return Arrays.stream(req.getCookies())
         .filter(cookie -> cookie.getName().equals(name))
@@ -42,14 +43,13 @@ public class Rq {
   public long getCookieAsLong(String name, long defaultValue) {
     String value = getCookie(name, null);
 
-    if ( value == null ) {
+    if (value == null) {
       return defaultValue;
     }
 
     try {
       return Long.parseLong(value);
-    }
-    catch ( NumberFormatException e ) {
+    } catch (NumberFormatException e) {
       return defaultValue;
     }
   }
