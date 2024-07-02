@@ -26,11 +26,11 @@ public class MemberController {
   public RsData login(String username, String password, HttpServletRequest req, HttpServletResponse resp) {
     Rq rq = new Rq(req, resp);
 
-    if (username == null || username.trim().isEmpty()) {
+    if (username == null || username.trim().length() == 0) {
       return RsData.of("F-3", "username(을)를 입력해주세요.");
     }
 
-    if (password == null || password.trim().isEmpty()) {
+    if (password == null || password.trim().length() == 0) {
       return RsData.of("F-4", "password(을)를 입력해주세요.");
     }
 
@@ -50,7 +50,7 @@ public class MemberController {
     Rq rq = new Rq(req, resp);
     boolean cookieRemoved = rq.removeCookie("loginedMemberId");
 
-    if (!cookieRemoved) {
+    if (cookieRemoved == false) {
       return RsData.of("S-2", "이미 로그아웃 상태입니다.");
     }
 
@@ -64,11 +64,10 @@ public class MemberController {
 
     long loginedMemberId = rq.getCookieAsLong("loginedMemberId", 0);
 
-    boolean isLgoined = loginedMemberId > 0;
+    boolean isLogined = loginedMemberId > 0;
 
-    if (!isLgoined) {
+    if (isLogined == false)
       return RsData.of("F-1", "로그인 후 이용해주세요.");
-    }
 
     Member member = memberService.findById(loginedMemberId);
 

@@ -21,4 +21,16 @@ public class RsData {
   public boolean isSuccess() {
     return resultCode.startsWith("S-");
   }
+
+  /*
+  public boolean abc() {
+    return false;
+  }
+   */
+
+  /*
+  public boolean isAbc() { // 이름이랑 관련이 있다. --> isAbc(int a) : 이런 형태는 나오지 않는다.
+    return false;
+  }
+   */
 }
